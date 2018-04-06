@@ -42,16 +42,21 @@ def login():
             password = form.password.data
             # using your model, query database for a user based on the username
             # and password submitted
-            user = UserProfile.query.filter_by(username = username).first()
+            user = UserProfile.query.filter(username = username).first()
             # store the result of that query to a `user` variable so it can be
             # passed to the login_user() method.
             if user is not None and check_password_hash(user.password, password):
                 login_user(user)
                 flash('Log in was successful', 'success')
-                return redirect(url_for("home"))  # they should be redirected to a secure-page route instead
+                return redirect(url_for("secure_page"))  # they should be redirected to a secure-page route instead
             else:
                 flash('Wrong password or username', 'Danger!')
-        return render_template("login.html", form=form)
+    return render_template('login.html', form=form)
+
+@app.route("/secure_page")
+@login_required
+def secure_page():
+    return render_template('secure_page.html')
 
 
 # user_loader callback. This callback is used to reload the user object from
