@@ -42,7 +42,7 @@ def login():
             password = form.password.data
             # using your model, query database for a user based on the username
             # and password submitted
-            user = UserProfile.query.filter(username = username).first()
+            user = UserProfile.query.filter_by(username = username).first()
             # store the result of that query to a `user` variable so it can be
             # passed to the login_user() method.
             if user is not None and check_password_hash(user.password, password):
@@ -57,6 +57,13 @@ def login():
 @login_required
 def secure_page():
     return render_template('secure_page.html')
+    
+@app.route("/logout")
+def logout():
+    logout_user()
+    flash('Logout was successful')
+    return redirect('home.html')
+    
 
 
 # user_loader callback. This callback is used to reload the user object from
