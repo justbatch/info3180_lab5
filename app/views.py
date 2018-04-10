@@ -45,7 +45,8 @@ def login():
             user = UserProfile.query.filter_by(username = username).first()
             # store the result of that query to a `user` variable so it can be
             # passed to the login_user() method.
-            if user is not None and check_password_hash(user.password, password):
+            # if user is not None and check_password_hash(user.password, password):
+            if user is not None and user.password == password:
                 login_user(user)
                 flash('Log in was successful', 'success')
                 return redirect(url_for("secure_page"))  # they should be redirected to a secure-page route instead
@@ -62,7 +63,7 @@ def secure_page():
 def logout():
     logout_user()
     flash('Logout was successful')
-    return redirect('home.html')
+    return redirect(url_for('home'))
     
 
 
